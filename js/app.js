@@ -126,22 +126,41 @@ function startApp() {
             <h3>Ingredients and Measures</h3>
         `;
 
-        const listGroup = document.createElement('UL');
-        listGroup.classList.add('list-group');
+		const listGroup = document.createElement('UL');
+		listGroup.classList.add('list-group');
 
 		for (let i = 1; i <= 20; i++) {
 			const ingredientMeasure = recipe[`strIngredient${i}`];
 			const ingredientName = recipe[`strMeasure${i}`];
 
 			if (ingredientMeasure) {
-                const ingredient = document.createElement('LI');
-                ingredient.classList.add('list-group-item');
+				const ingredient = document.createElement('LI');
+				ingredient.classList.add('list-group-item');
 				ingredient.textContent = `${ingredientMeasure} - ${ingredientName}`;
 				listGroup.appendChild(ingredient);
 			}
-        }
-        
-        modalBody.appendChild(listGroup);
+		}
+
+		modalBody.appendChild(listGroup);
+
+		const modalFooter = document.querySelector('.modal-footer');
+
+		cleanHTML(modalFooter);
+
+		const btnFavorite = document.createElement('BUTTON');
+		btnFavorite.classList.add('btn', 'btn-danger', 'col');
+		btnFavorite.textContent = 'Add to favorites';
+
+		btnCloseModal = document.createElement('BUTTON');
+		btnCloseModal.classList.add('btn', 'btn-secondary', 'col');
+		btnCloseModal.textContent = 'Close';
+
+		btnCloseModal.onclick = function () {
+			modal.hide();
+		};
+
+		modalFooter.appendChild(btnFavorite);
+		modalFooter.appendChild(btnCloseModal);
 
 		modal.show();
 	}
