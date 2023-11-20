@@ -57,9 +57,9 @@ function startApp() {
 		cleanHTML(result);
 
 		const heading = document.createElement('H2');
-        heading.classList.add('text-center', 'text-black', 'my-5');
-        heading.textContent = meals.length ? 'Meals' : 'No meals found';
-        result.appendChild(heading);
+		heading.classList.add('text-center', 'text-black', 'my-5');
+		heading.textContent = meals.length ? 'Meals' : 'No meals found';
+		result.appendChild(heading);
 
 		meals.forEach(meal => {
 			const { strMeal, strMealThumb, idMeal } = meal;
@@ -97,12 +97,12 @@ function startApp() {
 		});
 	}
 
-/**
- * Removes all child elements from the given selector.
- *
- * @param {HTMLElement} selector - The selector to clean.
- * @returns {void}
- */
+	/**
+	 * Removes all child elements from the given selector.
+	 *
+	 * @param {HTMLElement} selector - The selector to clean.
+	 * @returns {void}
+	 */
 	function cleanHTML(selector) {
 		while (selector.firstChild) {
 			selector.removeChild(selector.firstChild);
