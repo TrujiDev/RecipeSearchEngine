@@ -123,7 +123,25 @@ function startApp() {
             <img src="${strMealThumb}" alt="${strMeal}" class="img-fluid mb-4" />
             <h3>Instructions</h3>
             <p>${strInstructions}</p>
+            <h3>Ingredients and Measures</h3>
         `;
+
+        const listGroup = document.createElement('UL');
+        listGroup.classList.add('list-group');
+
+		for (let i = 1; i <= 20; i++) {
+			const ingredientMeasure = recipe[`strIngredient${i}`];
+			const ingredientName = recipe[`strMeasure${i}`];
+
+			if (ingredientMeasure) {
+                const ingredient = document.createElement('LI');
+                ingredient.classList.add('list-group-item');
+				ingredient.textContent = `${ingredientMeasure} - ${ingredientName}`;
+				listGroup.appendChild(ingredient);
+			}
+        }
+        
+        modalBody.appendChild(listGroup);
 
 		modal.show();
 	}
