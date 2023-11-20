@@ -151,6 +151,20 @@ function startApp() {
 		btnFavorite.classList.add('btn', 'btn-danger', 'col');
 		btnFavorite.textContent = 'Add to favorites';
 
+		// localStorage
+        btnFavorite.onclick = function () {
+            if (existsFavorite(idMeal)) {
+                return;
+            }
+
+			addFavorite({
+				id: idMeal,
+				name: strMeal,
+				image: strMealThumb,
+				instructions: strInstructions,
+			});
+		};
+
 		btnCloseModal = document.createElement('BUTTON');
 		btnCloseModal.classList.add('btn', 'btn-secondary', 'col');
 		btnCloseModal.textContent = 'Close';
@@ -164,6 +178,25 @@ function startApp() {
 
 		modal.show();
 	}
+
+    /**
+     * Adds a recipe to the favorites list.
+     * @param {Object} recipe - The recipe object to be added.
+     */
+    function addFavorite(recipe) {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+        localStorage.setItem('favorites', JSON.stringify([...favorites, recipe]));
+    }
+
+    /**
+     * Checks if a favorite with the given id exists in the local storage.
+     * @param {string} id - The id of the favorite to check.
+     * @returns {boolean} - True if the favorite exists, false otherwise.
+     */
+    function existsFavorite(id) {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+        return favorites.some(favorite => favorite.id === id);
+    }
 
 	/**
 	 * Removes all child elements from the given selector.
