@@ -4,6 +4,8 @@ function startApp() {
 
 	const result = document.querySelector('#result');
 
+	const modal = new bootstrap.Modal('#modal', {});
+
 	getCategories();
 
 	/**
@@ -85,7 +87,9 @@ function startApp() {
 			const recipeButton = document.createElement('BUTTON');
 			recipeButton.classList.add('btn', 'btn-danger', 'w-100');
 			recipeButton.textContent = 'View Recipe';
-			recipeButton.href = `recipe.html?id=${idMeal}`;
+			recipeButton.onclick = function () {
+				selectRecipe(idMeal);
+			};
 
 			recipeBody.appendChild(recipeTitle);
 			recipeBody.appendChild(recipeButton);
@@ -95,6 +99,33 @@ function startApp() {
 
 			result.appendChild(recipeContainer);
 		});
+	}
+
+	/**
+	 * Fetches a recipe from the MealDB API based on the provided ID and displays it.
+	 * @param {string} id - The ID of the recipe to fetch.
+	 */
+	function selectRecipe(id) {
+		const url = `https://themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+		fetch(url)
+			.then(response => response.json())
+			.then(result => showRecipe(result.meals[0]));
+	}
+
+	function showRecipe(recipe) {
+		const { idMeal, strInstructions, strMeal, strMealThumb } = recipe;
+
+		const modalTitle = document.querySelector('.modal .modal-title');
+		const modalBody = document.querySelector('.modal .modal-body');
+
+		modalTitle.textContent = strMeal;
+		modalBody.innerHTML = `
+            <img src="${strMealThumb}" alt="${strMeal}" class="img-fluid mb-4" />
+            <h3>Instructions</h3>
+            <p>${strInstructions}</p>
+        `;
+
+		modal.show();
 	}
 
 	/**
