@@ -17,7 +17,7 @@ To get started with the Food Recipe Finder, follow these steps:
 
 1. Clone the repository to your local machine.
    ```bash
-   git clone https://github.com/your-username/food-recipe-finder.git
+   git clone https://github.com/TrujiDev/food-recipe-finder.git
    ```
 
 2. Open the project folder and launch the `index.html` file in your preferred web browser.
