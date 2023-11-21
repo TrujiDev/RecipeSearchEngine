@@ -1,12 +1,19 @@
 function startApp() {
-	const selectCategories = document.querySelector('#categories');
-	selectCategories.addEventListener('change', selectCategory);
-
 	const result = document.querySelector('#result');
+	const selectCategories = document.querySelector('#categories');
+
+	if (selectCategories) {
+		selectCategories.addEventListener('change', selectCategory);
+		getCategories();
+	}
+
+	const favoritesDiv = document.querySelector('.favorites');
+
+	if (favoritesDiv) {
+		getFavorites();	
+	}
 
 	const modal = new bootstrap.Modal('#modal', {});
-
-	getCategories();
 
 	/**
 	 * Fetches the categories from the MealDB API and displays them.
@@ -74,21 +81,21 @@ function startApp() {
 
 			const recipeImage = document.createElement('IMG');
 			recipeImage.classList.add('card-img-top');
-			recipeImage.alt = `Image of ${strMeal}`;
-			recipeImage.src = strMealThumb;
+			recipeImage.alt = `Image of ${strMeal ?? meal.name}`;
+			recipeImage.src = strMealThumb ?? meal.image;
 
 			const recipeBody = document.createElement('DIV');
 			recipeBody.classList.add('card-body');
 
 			const recipeTitle = document.createElement('H3');
 			recipeTitle.classList.add('card-title', 'mb-3');
-			recipeTitle.textContent = strMeal;
+			recipeTitle.textContent = strMeal ?? meal.name;
 
 			const recipeButton = document.createElement('BUTTON');
 			recipeButton.classList.add('btn', 'btn-danger', 'w-100');
 			recipeButton.textContent = 'View Recipe';
 			recipeButton.onclick = function () {
-				selectRecipe(idMeal);
+				selectRecipe(idMeal ?? meal.id);
 			};
 
 			recipeBody.appendChild(recipeTitle);
@@ -112,6 +119,10 @@ function startApp() {
 			.then(result => showRecipe(result.meals[0]));
 	}
 
+	/**
+	 * Displays a recipe in a modal with its details, including instructions, ingredients, and an option to add/remove from favorites.
+	 * @param {Object} recipe - The recipe object containing the recipe details.
+	 */
 	function showRecipe(recipe) {
 		const { idMeal, strInstructions, strMeal, strMealThumb } = recipe;
 
@@ -225,6 +236,20 @@ function startApp() {
 		const toast = new bootstrap.Toast(toastDiv);
 		toastBody.textContent = msg;
 		toast.show();
+	}
+
+	function getFavorites() {
+		const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+		if (favorites.length) {
+			showMeals(favorites);
+			return;
+		}
+
+		const noFavorites = document.createElement('P');
+		noFavorites.classList.add('fs-4', 'text-center', 'font-bold', 'mt-5');
+		noFavorites.textContent = 'No favorites found';
+
+		result.appendChild(noFavorites);
 	}
 
 	/**
