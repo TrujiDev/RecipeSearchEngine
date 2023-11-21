@@ -149,13 +149,17 @@ function startApp() {
 
 		const btnFavorite = document.createElement('BUTTON');
 		btnFavorite.classList.add('btn', 'btn-danger', 'col');
-		btnFavorite.textContent = 'Add to favorites';
+		btnFavorite.textContent = existsFavorite(idMeal)
+			? 'Remove from favorites'
+			: 'Add to favorites';
 
 		// localStorage
-        btnFavorite.onclick = function () {
-            if (existsFavorite(idMeal)) {
-                return;
-            }
+		btnFavorite.onclick = function () {
+			if (existsFavorite(idMeal)) {
+				deleteFavorite(idMeal);
+				btnFavorite.textContent = 'Add to favorites';
+				return;
+			}
 
 			addFavorite({
 				id: idMeal,
@@ -163,6 +167,7 @@ function startApp() {
 				image: strMealThumb,
 				instructions: strInstructions,
 			});
+			btnFavorite.textContent = 'Remove from favorites';
 		};
 
 		btnCloseModal = document.createElement('BUTTON');
@@ -179,24 +184,34 @@ function startApp() {
 		modal.show();
 	}
 
-    /**
-     * Adds a recipe to the favorites list.
-     * @param {Object} recipe - The recipe object to be added.
-     */
-    function addFavorite(recipe) {
-        const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
-        localStorage.setItem('favorites', JSON.stringify([...favorites, recipe]));
-    }
+	/**
+	 * Adds a recipe to the favorites list.
+	 * @param {Object} recipe - The recipe object to be added.
+	 */
+	function addFavorite(recipe) {
+		const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+		localStorage.setItem('favorites', JSON.stringify([...favorites, recipe]));
+	}
 
-    /**
-     * Checks if a favorite with the given id exists in the local storage.
-     * @param {string} id - The id of the favorite to check.
-     * @returns {boolean} - True if the favorite exists, false otherwise.
-     */
-    function existsFavorite(id) {
-        const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
-        return favorites.some(favorite => favorite.id === id);
-    }
+	/**
+	 * Deletes a favorite item from local storage based on its ID.
+	 * @param {number} id - The ID of the favorite item to be deleted.
+	 */
+	function deleteFavorite(id) {
+		const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+		const newFavorites = favorites.filter(favorite => favorite.id !== id);
+		localStorage.setItem('favorites', JSON.stringify(newFavorites));
+	}
+
+	/**
+	 * Checks if a favorite with the given id exists in the local storage.
+	 * @param {string} id - The id of the favorite to check.
+	 * @returns {boolean} - True if the favorite exists, false otherwise.
+	 */
+	function existsFavorite(id) {
+		const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
+		return favorites.some(favorite => favorite.id === id);
+	}
 
 	/**
 	 * Removes all child elements from the given selector.
