@@ -158,6 +158,7 @@ function startApp() {
 			if (existsFavorite(idMeal)) {
 				deleteFavorite(idMeal);
 				btnFavorite.textContent = 'Add to favorites';
+				showToast('Removed successfully');
 				return;
 			}
 
@@ -168,6 +169,7 @@ function startApp() {
 				instructions: strInstructions,
 			});
 			btnFavorite.textContent = 'Remove from favorites';
+			showToast('Added successfully');
 		};
 
 		btnCloseModal = document.createElement('BUTTON');
@@ -211,6 +213,18 @@ function startApp() {
 	function existsFavorite(id) {
 		const favorites = JSON.parse(localStorage.getItem('favorites')) ?? [];
 		return favorites.some(favorite => favorite.id === id);
+	}
+
+	/**
+	 * Displays a toast message with the given message.
+	 * @param {string} msg - The message to be displayed in the toast.
+	 */
+	function showToast(msg) {
+		const toastDiv = document.querySelector('#toast');
+		const toastBody = document.querySelector('.toast-body');
+		const toast = new bootstrap.Toast(toastDiv);
+		toastBody.textContent = msg;
+		toast.show();
 	}
 
 	/**
